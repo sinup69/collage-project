@@ -1,2 +1,3 @@
 # collage-project
-Hospital management
+Hospital management project
+ 

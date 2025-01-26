@@ -1,6 +1,3 @@
-Here’s the updated documentation with instructions on re-adding the `firebase-adminsdk.json` file:  
-
----
 
 # Hospital Management System  
 

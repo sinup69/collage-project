@@ -106,7 +106,7 @@ graph TD
 
 1. **Clone the Repository**:  
    ```bash  
-   git clone https://github.com/your-username/hospital-management-system.git  
+   git clone https://github.com/sinup69/collage-project.git  
    cd hospital-management-system  
    ```  
 
@@ -151,7 +151,7 @@ We welcome contributions to the **Hospital Management System**! Here’s how you
 
 ### 2. **Clone the Repository**  
    ```bash  
-   git clone https://github.com/your-username/hospital-management-system.git  
+   git clone https://github.com/sinup69/collage-project.git  
    cd hospital-management-system  
    ```  
 

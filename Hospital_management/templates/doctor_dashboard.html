@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #444;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            max-width: 1000px;
+            border-collapse: collapse;
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .no-appointments {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+
+        .logout {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .logout a {
+            text-decoration: none;
+            background-color: #dc3545;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout a:hover {
+            background-color: #c82333;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            th, td {
+                padding: 8px 10px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Today's Appointments</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="error-message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% if today_appointments %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient Name</th>
+                    <th>Contact</th>
+                    <th>Appointment Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in today_appointments %}
+                    <tr>
+                        <td>{{ appointment.patient_name }}</td>
+                        <td>{{ appointment.patient_contact }}</td>
+                        <td>{{ appointment.appointment_time }}</td>
+                        <td>{{ appointment.status }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-appointments">No appointments scheduled for today.</p>
+    {% endif %}
+    <div class="logout">
+        <a href="{% url 'logout' %}">Logout</a>
+    </div>
+</body>
+</html>

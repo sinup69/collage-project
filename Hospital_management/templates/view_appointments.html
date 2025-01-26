@@ -1,0 +1,172 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Appointments</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #444;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            max-width: 1000px;
+            border-collapse: collapse;
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions a.edit {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .actions a.delete {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .actions a.edit:hover {
+            background-color: #218838;
+        }
+
+        .actions a.delete:hover {
+            background-color: #c82333;
+        }
+
+        .add-appointment {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .add-appointment a {
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-appointment a:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            th, td {
+                padding: 8px 10px;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .actions a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Appointments</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="error-message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <table>
+        <thead>
+            <tr>
+                <th>Patient ID</th>
+                <th>Doctor ID</th>
+                <th>Appointment Time</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appointment in appointments %}
+                <tr>
+                    <td>{{ appointment.patient_id }}</td>
+                    <td>{{ appointment.doctor_id }}</td>
+                    <td>{{ appointment.appointment_time }}</td>
+                    <td>{{ appointment.status }}</td>
+                    <td class="actions">
+                        <a href="{% url 'edit_appointment' appointment.id %}" class="edit">Edit</a>
+                        <a href="{% url 'delete_appointment' appointment.id %}" class="delete">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">No appointments found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="add-appointment">
+        <a href="{% url 'add_appointment' %}">Schedule New Appointment</a>
+    </div>
+</body>
+</html>

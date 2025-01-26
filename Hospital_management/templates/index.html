@@ -1,0 +1,28 @@
+<!-- templates/index.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <header>
+        <h1>Welcome to the Hospital Management System</h1>
+        <p>Your health, managed with care and precision.</p>
+    </header>
+
+    <section>
+        <h2>Features</h2>
+        <ul>
+            <li>Manage Patient Records</li>
+            <li>Schedule Appointments</li>
+            <li>View and Edit Medical History</li>
+            <li>Admin and Doctor Access</li>
+        </ul>
+    </section>
+
+    <section class="cta">
+        <h2>Get Started</h2>
+        <p>Sign in to access your account and manage hospital tasks.</p>
+        <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+    </section>
+</div>
+{% endblock %}

@@ -1,0 +1,174 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Patients</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #444;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            max-width: 1000px;
+            border-collapse: collapse;
+            background: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions a {
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+        }
+
+        .actions a.edit {
+            background-color: #28a745;
+            color: #fff;
+        }
+
+        .actions a.delete {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .actions a.edit:hover {
+            background-color: #218838;
+        }
+
+        .actions a.delete:hover {
+            background-color: #c82333;
+        }
+
+        .add-patient {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .add-patient a {
+            text-decoration: none;
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1.1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-patient a:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            th, td {
+                padding: 8px 10px;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .actions a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Patient Records</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="error-message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Contact</th>
+                <th>Medical History</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for patient in patients %}
+                <tr>
+                    <td>{{ patient.name }}</td>
+                    <td>{{ patient.age }}</td>
+                    <td>{{ patient.gender }}</td>
+                    <td>{{ patient.contact }}</td>
+                    <td>{{ patient.medical_history }}</td>
+                    <td class="actions">
+                        <a href="{% url 'edit_patient' patient.id %}" class="edit">Edit</a>
+                        <a href="{% url 'delete_patient' patient.id %}" class="delete">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6" style="text-align: center;">No patients found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="add-patient">
+        <a href="{% url 'add_patient' %}">Add New Patient</a>
+    </div>
+</body>
+</html>

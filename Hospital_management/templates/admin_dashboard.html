@@ -6,42 +6,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
+        /* General Reset */
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f7f7f7;
-            color: #333;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            box-sizing: border-box;
+            min-height: 100vh;
         }
 
         h1 {
             text-align: center;
             margin-bottom: 25px;
-            color: #444;
+            color: #007bff;
             font-size: 2.5em;
             font-weight: 600;
         }
 
+        /* Metrics Section */
         .metrics {
             display: flex;
             justify-content: space-around;
             width: 100%;
             max-width: 800px;
             margin-bottom: 30px;
+            gap: 20px;
         }
 
         .metric-card {
-            background: #ffffff;
+            background: #1e1e1e;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             text-align: center;
             width: 30%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
         }
 
         .metric-card h2 {
@@ -52,9 +65,10 @@
 
         .metric-card p {
             font-size: 1.2em;
-            color: #555;
+            color: #b3b3b3;
         }
 
+        /* Actions Section */
         .actions {
             display: flex;
             justify-content: center;
@@ -66,16 +80,18 @@
             text-decoration: none;
             background-color: #007bff;
             color: #fff;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 5px;
             font-size: 1.1em;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .actions a:hover {
             background-color: #0056b3;
+            transform: translateY(-3px);
         }
 
+        /* Logout Section */
         .logout {
             margin-top: 30px;
             text-align: center;
@@ -85,23 +101,26 @@
             text-decoration: none;
             background-color: #dc3545;
             color: #fff;
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 5px;
             font-size: 1.1em;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
 
         .logout a:hover {
             background-color: #c82333;
+            transform: translateY(-3px);
         }
 
+        /* Error Messages */
         .error-message {
-            color: red;
+            color: #ff4d4d;
             font-size: 0.9em;
             text-align: center;
             margin-bottom: 20px;
         }
 
+        /* Responsive Design */
         @media (max-width: 600px) {
             .metrics {
                 flex-direction: column;

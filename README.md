@@ -35,6 +35,59 @@ The **Hospital Management System** is a web application built using **Django** a
 
 ---
 
+## Workflow Block Diagram
+
+
+```mermaid
+graph TD
+    A[Start] --> B[User Authentication]
+    B -->|Login| C[Dashboard]
+    B -->|Register| D[Create User]
+    C -->|Admin| E[Admin Dashboard]
+    C -->|Doctor| F[Doctor Dashboard]
+    C -->|Patient| G[Patient Dashboard]
+
+    %% Admin Actions
+    E --> H[Manage Users]
+    E --> I[View Appointments]
+    E --> J[Generate Reports]
+
+    %% Doctor Actions
+    F --> K[View Assigned Patients]
+    F --> L[Manage Appointments]
+
+    %% Patient Actions
+    G --> M[View Appointments]
+    G --> N[Add Medical History]
+
+    %% Patients Module
+    H -->|Add/Edit| O[Add Patient]
+    H -->|View/Delete| P[View Patients]
+
+    %% Appointments Module
+    I -->|Add/Edit| Q[Add Appointment]
+    I -->|View/Delete| R[View Appointments]
+
+    %% Database Interaction
+    O --> S[Firestore: Patients Collection]
+    P --> S
+    Q --> T[Firestore: Appointments Collection]
+    R --> T
+
+    %% Error Handling and Redirects
+    S --> U[Error Handling: Firebase Exceptions]
+    T --> U
+    U -->|Log & Redirect| C
+    U -->|Log & Redirect| B
+
+    %% End Process
+    J --> V[End]
+    L --> V
+    M --> V
+    N --> V
+
+```
+
 ## Setup Instructions  
 
 ### Prerequisites  
@@ -159,3 +212,5 @@ For questions or feedback, leave a comment ☺️
 ---  
 
 Thank you for your interest in the **Hospital Management System**! We look forward to your contributions. 🚀  
+
+

@@ -17,6 +17,8 @@ def register_view(request):
         password = request.POST.get('password')
         role = request.POST.get('role')  # Admin or Doctor
 
+        print(username, password, role)        
+
         if not username or not password or not role:
             messages.error(request, "All fields are required.")
             return render(request, 'signup.html')
@@ -28,7 +30,6 @@ def register_view(request):
                 password=password,
                 email_verified=False
             )
-
             # Set custom claims for the user role
             auth.set_custom_user_claims(user.uid, {'role': role})
 
@@ -37,8 +38,10 @@ def register_view(request):
             user_data = {
                 'email': username,
                 'role': role,
-                'created_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S')  # Add a timestamp
+                'created_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'is_login' : False
             }
+            
             db.collection('users').document(user.uid).set(user_data)
 
             print(f'Successfully created new user: {user.uid} with role: {role}')
@@ -76,6 +79,9 @@ def login_view(request):
                 request.session['firebase_user_uid'] = user.uid
                 request.session['firebase_user_email'] = user.email
 
+                db = firestore.client()
+                db.collection('users').document(user.id).update({'is_logn': True})
+
                 # Redirect based on role
                 role = user.custom_claims.get('role', '')
                 if role == 'Admin':
@@ -99,13 +105,37 @@ def login_view(request):
 
     return render(request, 'login.html')
 
+
+
+from firebase_admin import firestore
+from django.shortcuts import redirect
+from django.contrib import messages
+
 def logout_view(request):
-    # Clear Firebase user data from the session
-    if 'firebase_user_uid' in request.session:
-        del request.session['firebase_user_uid']
-    if 'firebase_user_email' in request.session:
-        del request.session['firebase_user_email']
-    messages.success(request, "You have been logged out.")
+    # Get the Firebase user UID from the session
+    firebase_user_uid = request.session.get('firebase_user_uid')
+    
+    if firebase_user_uid:
+        try:
+            # Update Firestore: Set 'is_logged_in' to False for this user
+            db = firestore.client()
+            db.collection('users').document(firebase_user_uid).update({'is_login': False})
+            
+            # Clear Firebase user data from the session
+            del request.session['firebase_user_uid']
+            del request.session['firebase_user_email']
+
+            # Display a success message
+            messages.success(request, "You have been logged out.")
+        except Exception as e:
+            # Handle any error that might occur while updating Firestore
+            messages.error(request, f"An error occurred while logging out: {str(e)}")
+    
+    else:
+        # If no user is found in the session, just clear the session and show an error
+        messages.warning(request, "No user is logged in.")
+
+    # Redirect the user to the login page after logout
     return redirect('login')
 
 
@@ -152,13 +182,18 @@ def admin_dashboard(request):
             return redirect('login')
 
         # Fetch data for the admin dashboard (e.g., total patients, appointments)
-        from firebase_admin import firestore
+
         db = firestore.client()
         patients = db.collection('patients').stream()
         total_patients = len(list(patients))
 
+        active_doctors_query = db.collection('users').where('role', '==', 'Doctor').where('is_login', '==', True)
+        active_doctors = active_doctors_query.stream()
+        total_active_doctors = len(list(active_doctors))
+
         return render(request, 'admin_dashboard.html', {
             'total_patients': total_patients,
+            'active_doctors' : total_active_doctors
         })
 
     except firebase_exceptions.FirebaseError as e:
@@ -238,7 +273,7 @@ def doctor_dashboard(request):
                 today_appointments.append(appointment_data)
 
         # Debug: Print today's appointments
-        print(f"Today's appointments: {today_appointments}")
+        # print(f"Today's appointments: {today_appointments}")
 
         return render(request, 'doctor_dashboard.html', {
             'today_appointments': today_appointments,

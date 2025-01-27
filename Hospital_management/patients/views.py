@@ -235,7 +235,7 @@ def view_appointments(request):
         # Fetch all appointments from Firestore
         appointments = db.collection('appointments').stream()
         appointment_list = [{'id': appointment.id, **appointment.to_dict()} for appointment in appointments]
-        print(appointment_list)
+        # print(appointment_list)
         return render(request, 'view_appointments.html', {'appointments': appointment_list})
 
     except firebase_exceptions.FirebaseError as e:
